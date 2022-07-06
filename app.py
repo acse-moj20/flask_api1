@@ -1,4 +1,6 @@
 from flask import Flask
+import flask.scaffold
+flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
 from flask_restful import Api, Resource, reqparse
 import random
 
@@ -94,7 +96,7 @@ ai_quotes = [
 class Quote(Resource):
     def get(self, id=0):
         """
-        Returns a random quote if id contains a default value.
+        Returns a quote from the database. Random if id contains a default value.
         """
         if id == 0:
             return random.choice(ai_quotes), 200
@@ -105,6 +107,9 @@ class Quote(Resource):
         return "Quote not found", 404
     
     def post(self, id):
+        """
+        Adds a quote to the database.
+        """
         parser = reqparse.RequestParser()
         parser.add_argument("author")
         parser.add_argument("quote")
